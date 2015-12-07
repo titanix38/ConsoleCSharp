@@ -45,7 +45,7 @@ namespace FormationTest
 
             Book b = new Book { Id = 1, Title = "C# pour les newbies", Authors = la, Publisher = p,Category = Category.Computer,Price = 10.00 };
             Assert.IsNotNull(b);
-            Assert.AreEqual("castorman",b.Publisher.Name.ToLower(),  "Verifier le nom ou la casse");
+            Assert.AreEqual("CastorMan",b.Publisher.Name,  "Verifier le nom ou la casse");
             Assert.AreEqual("Armand",b.Authors[0].FirstName,  "Verifier le nom ou la casse");
             Assert.AreEqual(10.50,b.VATPrice,"Prix TTC non conforme");
 
