@@ -7,6 +7,8 @@
       <Diagram DiagramId="a372223672144f1994a46e0ff001c1d8" Name="Diagram1">
         <EntityTypeShape EntityType="FormationModel.Book" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="FormationModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FormationModel.Cart" Width="1.5" PointX="0.75" PointY="3.125" />
+        <AssociationConnector Association="FormationModel.FK_Cart_Book1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

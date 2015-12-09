@@ -55,8 +55,12 @@
     <Compile Include="Book.cs">
       <DependentUpon>EFModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="BookModel.cs" />
     <Compile Include="BookPartial.cs" />
     <Compile Include="BookRepository.cs" />
+    <Compile Include="Cart.cs">
+      <DependentUpon>EFModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EFModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

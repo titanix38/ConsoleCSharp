@@ -41,13 +41,10 @@ namespace FormationEF
         {
             return Entities.Set<T>();
         }
-        public virtual IEnumerable<T> GetByLambda(Func<T, bool> where, int page)
-        {
-            return Entities.Set<T>().Where(where).Take(page);
-        }
+                
         public virtual IEnumerable<T> GetByLambda(Func<T, bool> where, int page, int nbRow)
         {
-            return Entities.Set<T>().Where(where).Take(page).Skip(nbRow);
+            return Entities.Set<T>().Where(where).Take(nbRow).Skip(page-1*nbRow);
         }
 
     }

@@ -4,20 +4,23 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="FormationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="FormationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Book">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Price" Type="numeric" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Price" Type="numeric" Precision="5" Scale="2" />
         </EntityType>
         <!--Erreurs détectées durant la génération :
-avertissement 6013: Aucune clé primaire n'est définie pour la table/vue 'Formation.dbo.Cart' ; en outre, aucune clé primaire valide n'a pu être déduite. Cette table/vue a été exclue. Pour utiliser l'entité, vous devez passer en revue votre schéma, ajouter les clés appropriées et supprimer le commentaire associé.
+avertissement 6002: La table/vue 'Formation.dbo.Cart' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
         <EntityType Name="Cart">
-          <Property Name="Id" Type="int" />
-        </EntityType>-->
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -28,15 +31,32 @@ avertissement 6013: Aucune clé primaire n'est définie pour la table/vue 'Forma
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
-        <!--Erreurs détectées durant la génération :
-erreur 6004: La table 'Formation.dbo.Cart' est référencée par une relation, mais elle est introuvable.
-        <Association Name="FK_Cart_Book1" />-->
+        <Association Name="FK_Cart_Book1">
+          <End Role="Book" Type="Self.Book" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="FormationModelStoreContainer">
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Cart].[Id] AS [Id]
+    FROM [dbo].[Cart] AS [Cart]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Cart_Book1" Association="Self.FK_Cart_Book1">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="FormationModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -46,7 +66,8 @@ erreur 6004: La table 'Formation.dbo.Cart' est référencée par une relation, m
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="5" Scale="2" />
+          <NavigationProperty Name="Cart" Relationship="FormationModel.FK_Cart_Book1" FromRole="Book" ToRole="Cart" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -61,7 +82,31 @@ erreur 6004: La table 'Formation.dbo.Cart' est référencée par une relation, m
         <EntityContainer Name="FormationEFEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Book" EntityType="Self.Book" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Cart" EntityType="FormationModel.Cart" />
+          <AssociationSet Name="FK_Cart_Book1" Association="FormationModel.FK_Cart_Book1">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Book" Relationship="FormationModel.FK_Cart_Book1" FromRole="Cart" ToRole="Book" />
+        </EntityType>
+        <Association Name="FK_Cart_Book1">
+          <End Type="FormationModel.Book" Role="Book" Multiplicity="1" />
+          <End Type="FormationModel.Cart" Role="Cart" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -85,6 +130,13 @@ erreur 6004: La table 'Formation.dbo.Cart' est référencée par une relation, m
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cart">
+            <EntityTypeMapping TypeName="FormationModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

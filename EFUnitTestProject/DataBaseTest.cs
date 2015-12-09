@@ -69,23 +69,23 @@ namespace EFUnitTestProject
             br.GetByPrice(price: 10.00m);
 
             string s = "toto";
-            s.ToUpperFirstLetter();            
+            s.ToUpperFirstLetter();
 
         }
         [TestMethod]
         public void GetAll()
-        {            
+        {
             BookRepository br = new BookRepository { Entities = new FormationEFEntities() };
             IEnumerable<Book> lb = br.GetAll();
             Assert.IsNotNull(lb);
         }
         [TestMethod]
         public void GetById()
-        {           
+        {
             BookRepository br = new BookRepository { Entities = new FormationEFEntities() };
             Book b = new Book();
             b = br.GetById(2);
-            Assert.AreEqual(2, b.Id);
+            Assert.AreEqual("C-Sharp pour les Newbies", b.Title);
         }
         [TestMethod]
         public void GetByPrice()
@@ -96,7 +96,7 @@ namespace EFUnitTestProject
         }
         [TestMethod]
         public void GetByTitle()
-        {            
+        {
             BookRepository br = new BookRepository { Entities = new FormationEFEntities() };
             IEnumerable<Book> lb = br.GetByTitle("java");
             Assert.IsNotNull(lb);
@@ -106,7 +106,7 @@ namespace EFUnitTestProject
         {
 
             BookRepository br = new BookRepository { Entities = new FormationEFEntities() };
-            
+
             Book b = new Book();
 
             b.Title = "C++ Le dinosaure";
@@ -125,16 +125,14 @@ namespace EFUnitTestProject
             BookRepository br = new BookRepository { Entities = new FormationEFEntities() };
 
             Book b = new Book();
-            
-            b= br.GetById(7);
+
+            b = br.GetById(7);
             br.Remove(b);
             br.Save();
             b = br.GetById(7);
             Assert.IsNull(b);
         }
-        [TestMethod]
-        public void RemoveTest()
-        {
-
-        }
+        
+    }
+        
 }

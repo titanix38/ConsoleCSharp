@@ -27,5 +27,6 @@ namespace FormationEF
     
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Cart> Cart { get; set; }
     }
 }

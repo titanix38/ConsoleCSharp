@@ -16,6 +16,8 @@ namespace FormationEF
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public decimal Price { get; set; }
+        public Nullable<decimal> Price { get; set; }
+    
+        public virtual Cart Cart { get; set; }
     }
 }

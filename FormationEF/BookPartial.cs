@@ -10,7 +10,7 @@ namespace FormationEF
     {
         public decimal VATPrice
         {
-            get { return ((Price ?? 0m) * 1.05); }
+            get { return ((Price ?? 0.00m) * 1.05m); }
         }
     }
 }
